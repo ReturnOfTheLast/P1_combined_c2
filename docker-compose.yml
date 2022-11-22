@@ -66,6 +66,8 @@ services:
     networks:
       - "mongo_net"
       - "data_net"
+    ports:
+      - "8090:8090"
     depends_on:
       - "mongo"
 
