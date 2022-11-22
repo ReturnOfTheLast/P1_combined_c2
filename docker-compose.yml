@@ -1,0 +1,86 @@
+version: "3"
+
+networks:
+  mongo_net:
+    external: false
+  data_net:
+    external: false
+
+volumes:
+  db_data:
+    external: false
+
+services:
+  mongo:
+    image: mongo
+    container_name: "mongo"
+    restart: unless-stopped
+    networks:
+      - "mongo_net"
+    volumes:
+      - "db_data:/data/db"
+    environment:
+      - "MONGO_INITDB_ROOT_USERNAME=root"
+      - "MONGO_INITDB_ROOT_PASSWORD=password"
+
+  mongo-express:
+    image: mongo-express
+    container_name: "mongo-express"
+    restart: unless-stopped
+    networks:
+      - "mongo_net"
+    ports:
+      - "8081:8081"
+    depends_on:
+      - "mongo"
+    environment:
+      - "ME_CONFIG_MONGODB_ADMINUSERNAME=root"
+      - "ME_CONFIG_MONGODB_ADMINPASSWORD=password"
+      - "ME_CONFIG_MONGODB_URL=mongodb://root:password@mongo:27017/"
+
+  data_collector:
+    image: p1_data_collector:latest
+    build:
+      context: P1_data_collector
+      dockerfile: ./Dockerfile
+      tags:
+        - "p1_data_collector:latest"
+    container_name: "data_collector"
+    restart: unless-stopped
+    networks:
+      - "mongo_net"
+    ports:
+      - "62222:62222/udp"
+    depends_on:
+      - "mongo"
+
+  data_analysis_engine:
+    image: p1_data_analysis_engine:latest
+    build:
+      context: P1_data_analysis_engine
+      dockerfile: ./Dockerfile
+      tags:
+        - "p1_data_analysis_engine:latest"
+    container_name: "data_analysis_engine"
+    restart: unless-stopped
+    networks:
+      - "mongo_net"
+      - "data_net"
+    depends_on:
+      - "mongo"
+
+  main_interface:
+    image: p1_main_interface:latest
+    build:
+      context: P1_main_interface
+      dockerfile: ./Dockerfile
+      tags:
+        - "p1_main_interface:latest"
+    container_name: "main_interface"
+    restart: unless-stopped
+    networks:
+      - "data_net"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "data_analysis_engine"

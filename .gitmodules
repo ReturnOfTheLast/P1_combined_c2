@@ -1,0 +1,12 @@
+[submodule "P1_drone_controller"]
+	path = P1_drone_controller
+	url = git@github.com:ReturnOfTheLast/P1_drone_controller.git
+[submodule "P1_data_collector"]
+	path = P1_data_collector
+	url = git@github.com:ReturnOfTheLast/P1_data_collector.git
+[submodule "P1_data_analysis_engine"]
+	path = P1_data_analysis_engine
+	url = git@github.com:ReturnOfTheLast/P1_data_analysis_engine.git
+[submodule "P1_main_interface"]
+	path = P1_main_interface
+	url = git@github.com:ReturnOfTheLast/P1_main_interface.git
