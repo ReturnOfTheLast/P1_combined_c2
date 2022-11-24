@@ -4,5 +4,9 @@ if [[ -f ~/.ssh/github_id_rsa ]]; then
 	ssh-add ~/.ssh/github_id_rsa
 fi
 
+docker-compose down
+
 git pull && \
 git submodule update --recursive --remote
+
+docker-compose build
