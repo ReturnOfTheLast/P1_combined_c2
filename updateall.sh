@@ -5,4 +5,4 @@ if [[ -f ~/.ssh/github_id_rsa ]]; then
 fi
 
 git pull && \
-git submodules update --recursive --remote
+git submodule update --recursive --remote
