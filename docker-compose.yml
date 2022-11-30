@@ -84,22 +84,9 @@ services:
     restart: unless-stopped
     networks:
       - "data_net"
-      - "drone_net"
     ports:
       - "8080:8080"
     depends_on:
       - "data_analysis_engine"
-
-  drone_controller:
-    image: p1_drone_controller:latest
-    build:
-      context: P1_drone_controller
-      dockerfile: ./Dockerfile
-      tags:
-        - "p1_drone_controller:latest"
-    container_name: "drone_controller"
-    restart: unless-stopped
-    networks:
-      - "drone_net"
-    ports:
-      - "8100:8100"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
