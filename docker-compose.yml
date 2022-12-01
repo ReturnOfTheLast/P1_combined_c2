@@ -1,5 +1,6 @@
 version: "3"
 
+# Define internal networks
 networks:
   mongo_net:
     external: false
@@ -8,11 +9,14 @@ networks:
   drone_net:
     external: false
 
+# Define volume for the database
 volumes:
   db_data:
     external: false
 
+# Define service containers
 services:
+  # Database container
   mongo:
     image: mongo
     container_name: "mongo"
@@ -25,6 +29,7 @@ services:
       - "MONGO_INITDB_ROOT_USERNAME=root"
       - "MONGO_INITDB_ROOT_PASSWORD=password"
 
+  # GUI Database explorer
   mongo-express:
     image: mongo-express
     container_name: "mongo-express"
@@ -40,6 +45,7 @@ services:
       - "ME_CONFIG_MONGODB_ADMINPASSWORD=password"
       - "ME_CONFIG_MONGODB_URL=mongodb://root:password@mongo:27017/"
 
+  # Data Collector
   data_collector:
     image: p1_data_collector:latest
     build:
@@ -56,6 +62,7 @@ services:
     depends_on:
       - "mongo"
 
+  # Data analysis engine
   data_analysis_engine:
     image: p1_data_analysis_engine:latest
     build:
@@ -73,6 +80,7 @@ services:
     depends_on:
       - "mongo"
 
+  # Frontend
   main_interface:
     image: p1_main_interface:latest
     build:
